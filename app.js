@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const { Pool } = require('pg');
+const { Client } = require('pg');
 const port = process.env.PORT || 5000
 
 const app = express();
