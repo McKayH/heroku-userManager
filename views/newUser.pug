@@ -1,0 +1,20 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Create User
+    body
+        h1 Create New User 
+        form(action="/user" name="/user" method="post")
+            h3 First Name 
+            input#name(type="text" placeholder="first name" name="fname")
+            h3 Last Name
+            input#name(type="text" placeholder="last name" name="lname")
+            h3 Age 
+            input#age(type="numbe" value='18' name="age")
+            h3 Email 
+            input#email(type="text" placeholder="email@example.com" name="email")
+            div
+                input(type="submit", name="submit"  value="create user")

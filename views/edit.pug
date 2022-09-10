@@ -1,0 +1,20 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Edit User
+    body
+        h1= pageTitle 
+        form(action="/change/"+ user.id name="/change" method="post")
+            h3 First Name 
+            input#name(type="text" value=user.firstName name="fname")
+            h3 Last Name
+            input#name(type="text" value=user.lastName name="lname")
+            h3 Age 
+            input#age(type="numbe" value=user.age name="age")
+            h3 Email 
+            input#email(type="text" value=user.email name="email")
+            div
+                input(type="submit", name="submit"  value="Edit user")

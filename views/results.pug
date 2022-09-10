@@ -1,0 +1,21 @@
+doctype 
+html 
+    head 
+        title= pageTitle
+    body 
+        div.nav
+            a(href="/users") Back
+            br
+            a(href="/") Make New User
+        h1= pageTitle
+
+        each val in results 
+             div.userClass 
+                h2 #{val.firstName} #{val.lastName}
+                h3 Age: #{val.age}
+                h3 Email: #{val.email}
+                a(href="/edit/" +val._id) Edit 
+                br
+                a(href="/delete/"+val._id) Delete
+                br
+                span ---------------------------------- 

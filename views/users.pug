@@ -1,0 +1,48 @@
+doctype 
+html
+    head
+        title= pageTitle
+        link(rel="stylesheet" href="./style.css" type="text/css")
+    body 
+        div.nav
+            a(href="/") Make New User
+            br
+            br
+        form(action="/searching" method="post")  
+            input(type="text" name="search")
+            input(type="submit", value="Search")
+            br
+            input(type="radio" id="fna" value= "FirstName" name="select")
+            label(for="fna") Search By First Name
+            br
+            input(type="radio" id="lna" value= "LastName" name="select")
+            label(for="lna") Search By Last Name
+        span -------------------------------------------
+        form(action="/sort" method="post")
+            input(type="radio" id="Sfna" value= "sFName" name="sortSelect")
+            label(for="Sfna") Sort By First Name ||
+            input(type="radio" id="Slna" value= "sLName" name="sortSelect")
+            label(for="Slna") Sort By Last Name
+            br
+            br
+            input(type="radio" id="asc" value= "ASC" name="sortOrd")
+            label(for="asc") Ascending order
+            br
+            input(type="radio" id="dsc" value= "DSC" name="sortOrd")
+            label(for="dsc") Descending order
+            br
+            input(type="submit" value="Sort")
+        h1= pageTitle
+        each val in users
+            div.userClass 
+                h2 #{val.firstName} #{val.lastName}
+                h3 Age: #{val.age}
+                h3 Email: #{val.email}
+                a(href="/edit/" +val._id) Edit 
+                br
+                a(href="/delete/"+val._id) Delete
+                br
+                span ---------------------------------- 
+            
+            
+            
