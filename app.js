@@ -108,36 +108,42 @@ app.post('/searching', async (req, res)=>{
         console.log('ERROR: did not select search params');
     }
 });
-app.post('/sort', (req,res)=>{
+app.post('/sort', async (req,res)=>{
     if(req.body.sortSelect === 'sFName' && req.body.sortOrd === 'ASC') {
-        users.find({}).sort('firstName').exec((err,docs)=>{
+        await client.query(`SELECT * FROM user_table ORDER BY firstname;`)
+        .then(users =>{
             res.render('users', {
                 pageTitle: 'Ordered list Z>a',
-                users: docs,
+                users: users.rows,
             });
         });
+        
     }
     else if(req.body.sortSelect === 'sFName' && req.body.sortOrd === 'DSC') {
-        users.find({}).sort({firstName: 'desc'}).exec((err,docs)=>{
+        await client.query(`SELECT * FROM user_table ORDER BY firstname DESC;`)
+        .then(users =>{
             res.render('users', {
                 pageTitle: 'Ordered list Z>a',
-                users: docs,
+                users: users.rows,
             });
         });
     }
-    else if(req.body.sortSelect === 'sLName' && req.body.sortOrd === 'ASC') {
-        users.find({}).sort('lastName').exec((err,docs)=>{
+    if(req.body.sortSelect === 'sLName' && req.body.sortOrd === 'ASC') {
+        await client.query(`SELECT * FROM user_table ORDER BY lastname;`)
+        .then(users =>{
             res.render('users', {
                 pageTitle: 'Ordered list Z>a',
-                users: docs,
+                users: users.rows,
             });
         });
+        
     }
     else if(req.body.sortSelect === 'sLName' && req.body.sortOrd === 'DSC') {
-        users.find({}).sort({lastName: 'desc'}).exec((err,docs)=>{
+        await client.query(`SELECT * FROM user_table ORDER BY lastname DESC;`)
+        .then(users =>{
             res.render('users', {
                 pageTitle: 'Ordered list Z>a',
-                users: docs,
+                users: users.rows,
             });
         });
     }
