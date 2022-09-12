@@ -9,11 +9,11 @@ html(lang="en")
         h1= pageTitle 
         form(action="/change/"+ user.id name="/change" method="post")
             h3 First Name 
-            input#name(type="text" value=user.firstName name="fname")
+            input#name(type="text" value=user.firstname name="fname")
             h3 Last Name
-            input#name(type="text" value=user.lastName name="lname")
+            input#name(type="text" value=user.lastname name="lname")
             h3 Age 
-            input#age(type="numbe" value=user.age name="age")
+            input#age(type="number" value=user.age name="age")
             h3 Email 
             input#email(type="text" value=user.email name="email")
             div

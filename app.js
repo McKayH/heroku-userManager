@@ -31,104 +31,79 @@ app.get('/', (req, res)=>{
     
 });
 app.post('/user', (req, res)=>{
-        // firstName: req.body.fname,
-        // lastName: req.body.lname,
-        // age: req.body.age,
-        // email: req.body.email,
-
-        const insertUser = async (firstName, lastName, age, email) => {
-            try {
-                await client.query(
-                    `INSERT INTO "user_table" (id, firstName, lastName, age, email)  
-                    VALUES${[ firstName, lastName, age, email]}`); // sends queries
-                return true;
-            }
-            catch (error) {
-                    console.error(error.stack);
-                    return false;
-            } 
-            finally{
-                    res.redirect('users');
-            }
-        };
-        insertUser(req.body.fname,req.body.lname,req.body.age,req.body.email,)
-            
-    });
+    const insertUser = async (firstName, lastName, age, email) => {
+        const id = await (await client.query("SELECT NOW()")).rows[0].now;
+        try {
+            await client.query(
+                `INSERT INTO user_table(id, firstName, lastName, age, email)
+                VALUES('${id}', '${firstName}', '${lastName}', ${age}, '${email}')`); // sends queries
+            return true;
+        }
+        catch (error) {
+                console.error(error.stack);
+                return false;
+        } 
+        finally{
+                res.redirect('users');
+        }
+    };
+    insertUser(req.body.fname, req.body.lname, req.body.age, req.body.email)
+        
+});
     
-app.get('/users', (req, res)=>{
-    client.query(`SELECT * FROM user_table`)
-    .then(users =>{res.render('users', {
+app.get('/users', async (req, res)=>{
+    await client.query(`SELECT * FROM user_table`)
+    .then(users =>{
+        res.render('users', {
             pageTitle: 'List of users',
-            users: users
+            users: users.rows
         });
     });
    
 });
-app.get('/delete/:id', (req, res)=>{
-    users.deleteOne({_id: req.params.id }).then(function(){
-        console.log("Data deleted"); // Success
-        res.redirect('back')
-    }).catch(function(error){
-        console.log(error); // Failure
-    });
+app.get('/delete/:id', async (req, res)=>{
+    await client.query(`DELETE FROM user_table WHERE id = '${req.params.id}'`)
+    .then(res.redirect('back'));
     
 });
-app.get('/edit/:id',(req, res)=>{
-    users.findById(req.params.id, (err, doc)=>{
-        if (err) {
-            console.log(err);
-        }
-        else{
-            res.render('edit', {
-                pageTitle: 'Edit User: ' + doc.firstName + ' ' + doc.lastName,
-                user: doc,
-            });
-        }
+app.get('/edit/:id', async  (req, res)=>{
+    await client.query(`SELECT * FROM user_table WHERE id = '${req.params.id}'`)
+    .then(user =>{
+        const doc = user.rows[0];
+        res.render('edit', {
+            pageTitle: 'Edit User: ' + doc.firstname + ' ' + doc.lastname,
+            user: doc,
+        });
     });
 });
-app.post('/change/:id', (req,res)=>{
-    users.findByIdAndUpdate(req.params.id, {
-        firstName: req.body.fname,
-        lastName: req.body.lname,
-        age: req.body.age,
-        email: req.body.email,
-    }, (err, data)=>{
-        if (err) {
-            console.log(err);
-        }
-    });
-    res.redirect('/users');
+app.post('/change/:id', async (req,res)=>{
+
+    await client.query(`UPDATE user_table SET firstname = '${req.body.fname}',
+    lastname = '${req.body.lname}',age = ${req.body.age},email = '${req.body.email}' WHERE id = '${req.params.id}'`)
+    .then(res.redirect('/users'));
 });
-app.post('/searching', (req, res)=>{
-    console.log(req.body.select);
+app.post('/searching', async (req, res)=>{
     if(req.body.select === 'FirstName'){
-        users.find({firstName: req.body.search}, (err, docs)=>{
-            if (err){
-                console.log(err);
-            }
-            else{
-                console.log(docs);
-                res.render('results', {
-                    pageTitle: 'Search Results',
-                    results: docs,
-                });
-            }
+        await client.query(`SELECT * FROM user_table WHERE UPPER(firstname) = UPPER('${req.body.search}')`)
+        .then(user =>{
+            console.log(user);
+            res.render('results', {
+                pageTitle: 'Search Results',
+                results: user.rows,
+             });
         });
     }
     else if(req.body.select === 'LastName'){
-        users.find({lastName: req.body.search}, (err, docs)=>{
-            if (err){
-                console.log(err);
-            }
-            else{
-                console.log(docs);
-                res.render('results', {
-                    pageTitle: 'Search Results',
-                    results: docs,
-                });
-            }
+        await client.query(`SELECT * FROM user_table WHERE UPPER(lastname) = UPPER('${req.body.search}')`)
+        .then(user =>{
+            console.log(user);
+            res.render('results', {
+                pageTitle: 'Search Results',
+                results: user.rows,
+             });
         });
     }
+    
     else{
         console.log('ERROR: did not select search params');
     }

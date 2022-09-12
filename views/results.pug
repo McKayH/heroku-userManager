@@ -11,7 +11,7 @@ html
 
         each val in results 
              div.userClass 
-                h2 #{val.firstName} #{val.lastName}
+                h2 #{val.firstname} #{val.lastname}
                 h3 Age: #{val.age}
                 h3 Email: #{val.email}
                 a(href="/edit/" +val._id) Edit 
