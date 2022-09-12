@@ -86,7 +86,6 @@ app.post('/searching', async (req, res)=>{
     if(req.body.select === 'FirstName'){
         await client.query(`SELECT * FROM user_table WHERE UPPER(firstname) = UPPER('${req.body.search}')`)
         .then(user =>{
-            console.log(user);
             res.render('results', {
                 pageTitle: 'Search Results',
                 results: user.rows,
@@ -96,16 +95,14 @@ app.post('/searching', async (req, res)=>{
     else if(req.body.select === 'LastName'){
         await client.query(`SELECT * FROM user_table WHERE UPPER(lastname) = UPPER('${req.body.search}')`)
         .then(user =>{
-            console.log(user);
             res.render('results', {
                 pageTitle: 'Search Results',
                 results: user.rows,
              });
         });
     }
-    
     else{
-        console.log('ERROR: did not select search params');
+        res.render('error');
     }
 });
 app.post('/sort', async (req,res)=>{
@@ -146,6 +143,9 @@ app.post('/sort', async (req,res)=>{
                 users: users.rows,
             });
         });
+    }
+    else{
+        res.render('error');
     }
 });
 
